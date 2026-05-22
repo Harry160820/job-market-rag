@@ -1,0 +1,19 @@
+# docker-compose.yml
+version: "3.9"
+services:
+  api:
+    build: .
+    ports: ["8000:8000"]
+    volumes:
+      - ./chroma_db:/app/chroma_db   # persist the vector store
+      - ./data:/app/data
+    environment:
+      - ANTHROPIC_API_KEY=${ANTHROPIC_API_KEY}
+    depends_on: [mlflow]
+
+  mlflow:
+    image: ghcr.io/mlflow/mlflow:latest
+    ports: ["5000:5000"]
+    volumes:
+      - ./mlruns:/mlruns
+    command: mlflow server --host 0.0.0.0
