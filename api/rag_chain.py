@@ -1,7 +1,8 @@
-from langchain_community.vectorstores import chroma
-from langchain_community.embeddings import HuggingFaceEmbeddings
+# api/rag_chain.py
+from langchain_huggingface import HuggingFaceEmbeddings
+from langchain_chroma import Chroma
 from langchain.chains import RetrievalQA
-from langchain_community.llms import Ollama
+from langchain_ollama import OllamaLLM
 from langchain.prompts import PromptTemplate
 
 PROMPT = PromptTemplate(
@@ -18,24 +19,24 @@ Answer:"""
 )
 
 def build_chain():
-    embeddings = HuggingFaceEmbeddings(
-        model_name = 'all-MiniLM-L6-v2'
-    )
+    embeddings = HuggingFaceEmbeddings(model_name="all-MiniLM-L6-v2")
+    
     vectordb = Chroma(
         persist_directory="./chroma_db",
         embedding_function=embeddings,
         collection_name="job_postings"
     )
-
+    
     retriever = vectordb.as_retriever(
         search_type="mmr",
         search_kwargs={"k": 8, "fetch_k": 20}
     )
-
-    llm = Ollama(model="llama3.2", temperature=0.0)   # runs on your machine
+    
+    llm = OllamaLLM(model="llama3.2")
+    
     return RetrievalQA.from_chain_type(
         llm=llm,
         retriever=retriever,
-        return_source_documents=True,
-        chain_type_kwargs={"prompt": PROMPT}
+        chain_type_kwargs={"prompt": PROMPT},
+        return_source_documents=True
     )
