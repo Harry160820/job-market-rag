@@ -8,7 +8,7 @@ services:
       - ./chroma_db:/app/chroma_db   # persist the vector store
       - ./data:/app/data
     environment:
-      - ANTHROPIC_API_KEY=${ANTHROPIC_API_KEY}
+      - OLLAMA_HOST=http://host.docker.internal:11434
     depends_on: [mlflow]
 
   mlflow:

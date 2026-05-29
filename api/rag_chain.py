@@ -1,4 +1,6 @@
 # api/rag_chain.py
+import os
+
 from langchain_huggingface import HuggingFaceEmbeddings
 from langchain_chroma import Chroma
 from langchain.chains import RetrievalQA
@@ -32,7 +34,9 @@ def build_chain():
         search_kwargs={"k": 8, "fetch_k": 20}
     )
     
-    llm = OllamaLLM(model="llama3.2")
+    llm = OllamaLLM(model="llama3.2",
+                    base_url=os.getenv("OLLAMA_HOST", "http://localhost:11434")
+                    )
     
     return RetrievalQA.from_chain_type(
         llm=llm,
