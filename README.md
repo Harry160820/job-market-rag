@@ -115,7 +115,7 @@ mlflow ui
 ---
 ## Demo
 
-[▶ Watch Demo on YouTube](https://youtu.be/-SsSkb7bWW8)
+[▶ Watch Demo on YouTube](https://youtu.be/9E1A4BJuGZk)
 
 ```
 
